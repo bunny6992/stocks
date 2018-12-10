@@ -114,6 +114,14 @@
                                 <span style="z-index:1; position:absolute; right:0; height: 25px; width: 22px; background-color: red; color: white; border-radius: 100%; text-align: center" class="pull-right; cursor: pointer;" @click="deleteGridItem(index)">X</span>
                                 
                                 <div v-if="item.type == 'combo'">
+                                    <div style="text-align: center; font-size: 18px;">
+                                        <span style="width: 35px; border-radius: 15%; background-color: #7386D5; color: white;" @click="updateCombo('1m', item)">1m</span>
+                                        <span style="width: 35px; border-radius: 15%; background-color: #7386D5; color: white;" @click="updateCombo('3m', item)">3m</span>
+                                        <span style="width: 35px; border-radius: 15%; background-color: #7386D5; color: white;" @click="updateCombo('6m', item)">6m</span>
+                                        <span style="width: 35px; border-radius: 15%; background-color: #7386D5; color: white;" @click="updateCombo('ytd', item)">ytd</span>
+                                        <span style="width: 35px; border-radius: 15%; background-color: #7386D5; color: white;" @click="updateCombo('1y', item)">1y</span>
+                                        <span style="width: 35px; border-radius: 15%; background-color: #7386D5; color: white;" @click="updateCombo('2y', item)">2y</span>
+                                    </div>
                                     <h6 v-if="item.heading == true">@{{ item.symbol.name }}<h6>
                                     <apex-charts :height="item.charts[0].height" :width="item.charts[0].width" type="candlestick" :options="item.charts[0].options" :series="item.charts[0].series"></apex-charts>
                                     <apex-charts class="combo-bar-chart" :height="item.charts[1].height" :width="item.charts[1].width" type="bar" :options="item.charts[1].options" :series="item.charts[1].series"></apex-charts>

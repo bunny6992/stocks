@@ -255,6 +255,65 @@ $('.grid-stack').gridstack(this.gridOptions);
                     });
 
             },
+            updateCombo(duration, item) {
+                axios.get(`https://api.iextrading.com/1.0/stock/${item.symbol.symbol}/chart/${duration}`)
+                    .then( (response) => {
+                        if(response.status == '200') {
+                           let days = response.data;
+                           let series = [];
+                           let dataArray = [];
+                           this.options2.xaxis.categories = [];
+                           this.series2[0].data = [];
+                           _.forEach(days, (day, index) => {
+                                let date = new Date(day.date);
+                                let test = [date.getTime(), [day.open, day.high, day.low, day.close]]
+                                this.options2.xaxis.categories.push(date);
+                                this.series2[0].data.push(day.close);
+                                dataArray.push(test);
+                            })
+                            this.series[0].data = dataArray;
+                            // this.$refs.test.refresh();
+                            // this.$refs.test2.refresh();
+                            // let charts = [];
+                            // let c1Height = item.charts[0]['height'];
+                            // let c2Height = item.charts[1]['height'];
+                            // let c1Width = item.charts[0]['width'];
+                            // let c2Width = item.charts[1]['width'];
+
+                            // charts.push({options: this.options, series: this.series, height: c1Height, width: c1Width, type: 'candlestick'})
+                            // charts.push({options: this.options2, series: this.series2, height: c2Height, width: c2Width, type: 'bar'})
+                            // this.layout.push({ w: 4, h: 3, x: 0, y: 0, i: 1});
+                            // let newIndex = 1;
+                            // while(_.find(this.gridItems, ['i', newIndex]) != undefined) {
+                            //     newIndex++;
+                            // }
+                            //item.charts = {};
+                            //item.charts = charts;
+                            item.charts[0]['options'] = this.options;
+                            item.charts[0].series = this.series;
+
+                            item.charts[1]['options'] = this.options2;
+                            item.charts[1].series = this.series2;
+                            // setTimeout(() => {
+                                item.charts[0].height = item.charts[0].height + 1;
+                                item.charts[1].height = item.charts[1].height + 1;
+                                item.charts[0].width = item.charts[0].width + 1;
+                                item.charts[1].width = item.charts[1].width + 1;
+                            // }, 500);
+                            // this.gridItems.push({
+                            //     type: 'combo', charts: charts, symbol: symbol, heading: true,
+                            //     w: 3, h: 7, x: 0, y: 0, i: newIndex, minH: 7, minW: 3
+                            // })
+                            // this.gridItems.push({type: 'combo', charts: charts, symbol: symbol, heading: true})
+                            // this.route = 'home';
+                            // this.$modal.hide('launcher');
+                            // this.selectedSymbol = '';
+                        }
+                    })
+                    .catch( (error) => {
+                        console.log(error);
+                    });
+            },
             resizedEvent: function(i, newH, newW, newHPx, newWPx) {
                 let item = _.find(this.gridItems, ['i', i]);
                 console.log("RESIZE i=" + i + ", H=" + newH + ", W=" + newW + ", H(px)=" + newHPx + ", W(px)=" + newWPx);
@@ -265,12 +324,12 @@ $('.grid-stack').gridstack(this.gridOptions);
                     item.charts[1].width = newWPx - 50;
                     if (newHPx > 350 && newWPx > 320) {
                         item.charts[0].options.xaxis.labels.show = true;
-                        item.charts[1].options.xaxis.labels.show = true;
+                        // item.charts[1].options.xaxis.labels.show = true;
                         item.charts[0].options.yaxis.labels.show = true;
                         item.charts[1].options.yaxis.labels.show = true;
                     } else {
                         item.charts[0].options.xaxis.labels.show = false;
-                        item.charts[1].options.xaxis.labels.show = false;
+                        // item.charts[1].options.xaxis.labels.show = false;
                         item.charts[0].options.yaxis.labels.show = false;
                         item.charts[1].options.yaxis.labels.show = false;
                     }
